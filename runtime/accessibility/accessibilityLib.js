@@ -49,22 +49,28 @@ module.exports = {
         done(results);
       });
     });
-
+    const envName = env.envName.toLowerCase();
     const additionalData = await browser.capabilities;
     const browserName = global.settings.remoteConfig || global.BROWSER_NAME;
     console.log('Generating Axe Report........');
     const reportLiteType = emailData.AccessibilityLiteReport;
     if (reportLiteType === 'Yes') {
-      await module.exports.GenerateFinalAccessibilityLiteReport(results, additionalData, PageName, browserName);
+      await module.exports.GenerateFinalAccessibilityLiteReport(
+        results,
+        additionalData,
+        PageName,
+        browserName,
+        envName
+      );
     } else {
-      await module.exports.GenerateFinalAccessibilityReport(results, additionalData, PageName, browserName);
+      await module.exports.GenerateFinalAccessibilityReport(results, additionalData, PageName, browserName, envName);
     }
 
     errorCount = results.violations.length + results.incomplete.length;
     totalErrorCout += errorCount;
   },
 
-  async GenerateFinalAccessibilityReport(fullData, additionalData, Pagename, browserName) {
+  async GenerateFinalAccessibilityReport(fullData, additionalData, Pagename, browserName, envName) {
     // eslint-disable-next-line global-require
     const fs = require('fs-extra');
     // eslint-disable-next-line global-require
@@ -76,7 +82,7 @@ module.exports = {
     finalHtml = finalHtml.replace('XXX-PageName', Pagename);
 
     // take screen pics
-    const dirAcc = `${global.paths.reports}/${browserName}/accessibility`;
+    const dirAcc = `${global.paths.reports}/${browserName}/${envName}/accessibility`;
     if (!fs.existsSync(dirAcc)) {
       fs.ensureDirSync(dirAcc);
     }
@@ -102,7 +108,7 @@ module.exports = {
     );
   },
 
-  async GenerateFinalAccessibilityLiteReport(fullData, additionalData, Pagename, browserName) {
+  async GenerateFinalAccessibilityLiteReport(fullData, additionalData, Pagename, browserName, envName) {
     // eslint-disable-next-line global-require
     const fs = require('fs-extra');
     // eslint-disable-next-line global-require
@@ -121,7 +127,7 @@ module.exports = {
     let finalHtml = addDataInHtml.replace('XXX-AdditinalData', JSON.stringify(additionalData));
     finalHtml = finalHtml.replace('XXX-PageName', Pagename);
 
-    const dirAcc = `${global.paths.reports}/${browserName}/accessibility`;
+    const dirAcc = `${global.paths.reports}/${browserName}/${envName}/accessibility`;
     if (!fs.existsSync(dirAcc)) {
       fs.ensureDirSync(dirAcc);
     }

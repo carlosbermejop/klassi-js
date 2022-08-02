@@ -22,59 +22,62 @@
  */
 const fs = require('fs-extra');
 const path = require('path');
-const reporter = require('cucumber-html-reporter');
+const reporter = require('multiple-cucumber-html-reporter');
 const jUnit = require('cucumber-junit');
-const pactumJs = require('pactum');
-const getRemote = require('../getRemote');
+// const pactumJs = require('pactum');
+// const getRemote = require('../getRemote');
 
-const remoteService = getRemote(global.settings.remoteService);
+// const remoteService = getRemote(global.settings.remoteService);
 const browserName = global.settings.remoteConfig || global.BROWSER_NAME;
-let resp;
-let obj;
+// let resp;
+// let obj;
 
 module.exports = {
-  ipAddr: async () => {
-    const endPoint = 'http://ip-api.com/json';
-    resp = await pactumJs.spec().get(endPoint).toss();
-    return resp;
-  },
+  // ipAddr: async () => {
+  //   const endPoint = 'http://ip-api.com/json';
+  //   resp = await pactumJs.spec().get(endPoint).toss();
+  //   return resp;
+  // },
 
   async reporter() {
-    try {
-      await this.ipAddr();
-      obj = await resp.body;
-      // console.log('this is in the reporter ', obj);
-    } catch (err) {
-      obj = {};
-      console.log('IpAddr func err: ', err.message);
-    }
+    const envName = env.envName.toLowerCase();
+    // try {
+    //   await this.ipAddr();
+    //   obj = await resp.body;
+    //   // console.log('this is in the reporter ', obj);
+    // } catch (err) {
+    //   obj = {};
+    //   console.log('IpAddr func err: ', err.message);
+    // }
+    // const jsonDir = path.resolve(global.paths.reports, browserName, `${reportName}-${dateTime}.json`);
+    // const jsonDir = path.resolve(global.paths.reports, `${browserName}/`);
     const jsonFile = path.resolve(global.paths.reports, browserName, `${reportName}-${dateTime}.json`);
+    const jsonDir = path.resolve(global.paths.reports, `${browserName}/`);
 
     if (global.paths.reports && fs.existsSync(global.paths.reports)) {
       global.endDateTime = helpers.getEndDateTime();
 
       const reportOptions = {
-        theme: 'bootstrap',
-        jsonFile,
-        output: path.resolve(global.paths.reports, browserName, `${reportName}-${dateTime}.html`),
+        jsonDir,
+        reportPath: path.resolve(global.paths.reports, browserName, envName, `${reportName}-${dateTime}`),
         reportSuiteAsScenarios: true,
         launchReport: !global.settings.disableReport,
         ignoreBadJsonFile: true,
         metadata: {
-          'Test Started': startDateTime,
-          // eslint-disable-next-line no-undef
-          Environment: env.envName,
-          IpAddress: obj.query,
-          Browser: browserName,
-          Location: `${obj.city} ${obj.regionName}`,
-          Platform: process.platform,
-          'Test Completion': endDateTime,
-          Executed: remoteService && remoteService.type === 'lambdatest' ? 'Remote' : 'Local',
+          browser: {
+            name: 'chrome',
+            version: '60',
+          },
+          device: 'Local test machine',
+          platform: {
+            name: 'ubuntu',
+            version: '16.04',
+          },
         },
-        brandTitle: `${reportName}-${dateTime}`,
+        brandTitle: `${reportName} ${dateTime}`, // brandTitle: `${reportName} ${dateTime} ${env.envName}`,
         name: `${projectName} ${browserName}`,
       };
-      // eslint-disable-next-line func-names
+      // eslint-disable-next-line func-names,wdio/no-pause
       browser.pause(DELAY_3s).then(() => {
         reporter.generate(reportOptions);
 
@@ -82,9 +85,8 @@ module.exports = {
         const reportRaw = fs.readFileSync(jsonFile).toString().trim();
         const xmlReport = jUnit(reportRaw);
         const junitOutputPath = path.resolve(
-          path.resolve(global.paths.reports, browserName, `${reportName}-${dateTime}.xml`)
+          path.resolve(global.paths.reports, browserName, envName, `${reportName}-${dateTime}.xml`)
         );
-
         fs.writeFileSync(junitOutputPath, xmlReport);
       });
     }

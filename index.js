@@ -191,8 +191,9 @@ global.paths = paths;
  * Adding Accessibility folder at project level
  */
 global.browserName = global.settings.remoteConfig || BROWSER_NAME;
-const reports = `./reports/${browserName}`;
-const axereports = `./reports/${browserName}/accessibility`;
+const envName = env.envName.toLowerCase();
+const reports = `./reports/${browserName}/${envName}`;
+const axereports = `./reports/${browserName}/${envName}/accessibility`;
 
 /** file creation for userAgent globally */
 const file = './shared-objects/docs/userAgent.txt';
@@ -377,7 +378,6 @@ if (options.tags.length > 0) {
 
 /** add switch to tell cucumber to produce json report files */
 const cpPath = '@cucumber/pretty-formatter';
-
 process.argv.push(
   '-f',
   cpPath,

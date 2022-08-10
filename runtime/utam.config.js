@@ -6,10 +6,10 @@ const searchedFor = explorerSync.search();
 const envConfig = searchedFor.config;
 const { dataConfig } = envConfig;
 
-global.projectName = process.env.PROJECT_NAME || dataConfig.projectName;
+const projectName = process.env.PROJECT_NAME || dataConfig.projectName;
 
 module.exports = {
-  pageObjectsRootDir: projectName === global.projectName ? '../' : '../../../',
+  pageObjectsRootDir: projectName === 'Klassi Automated Test' ? '../' : '../../../',
   pageObjectsFileMask: ['**/__utam__/**/*.utam.json'],
   extensionsFileMask: ['**/__utam__/**/*.utam.json'],
   pageObjectsOutputDir: 'page-objects/__utam__/compiledUTAM',

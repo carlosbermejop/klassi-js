@@ -51,15 +51,23 @@ module.exports = {
     // }
     // const jsonDir = path.resolve(global.paths.reports, browserName, `${reportName}-${dateTime}.json`);
     // const jsonDir = path.resolve(global.paths.reports, `${browserName}/`);
-    const jsonFile = path.resolve(global.paths.reports, browserName, `${reportName}-${dateTime}.json`);
-    const jsonDir = path.resolve(global.paths.reports, `${browserName}/`);
+    const jsonFile = path.resolve(global.paths.reports, browserName, envName, `${reportName}-${dateTime}.json`);
+
+    const jsonDir = path.resolve(global.paths.reports, browserName, envName);
+
+    const reportPath = path.resolve(
+      global.paths.reports,
+      browserName,
+      envName,
+      `${reportName}-${helpers.currentDate()}`
+    );
 
     if (global.paths.reports && fs.existsSync(global.paths.reports)) {
       global.endDateTime = helpers.getEndDateTime();
 
       const reportOptions = {
         jsonDir,
-        reportPath: path.resolve(global.paths.reports, browserName, envName, `${reportName}-${dateTime}`),
+        reportPath,
         reportSuiteAsScenarios: true,
         launchReport: !global.settings.disableReport,
         ignoreBadJsonFile: true,

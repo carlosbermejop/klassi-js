@@ -82,7 +82,9 @@ module.exports = {
     finalHtml = finalHtml.replace('XXX-PageName', Pagename);
 
     // take screen pics
-    const dirAcc = `${global.paths.reports}/${browserName}/${envName}/accessibility`;
+    const dirAcc = `${
+      global.paths.reports
+    }/${browserName}/${envName}/${reportName}-${helpers.currentDate()}/accessibility`;
     if (!fs.existsSync(dirAcc)) {
       fs.ensureDirSync(dirAcc);
     }
@@ -98,14 +100,14 @@ module.exports = {
           path: `${dirAcc}/${fileName}.html`,
         });
     });
-    fs.writeFile(
-      `${dirAcc}/AccessbilityReport_${Pagename}-${browserName}_${curdatatime}.json`,
-      JSON.stringify(fullData, null, 4),
-      'utf-8',
-      (err) => {
-        if (err) throw err;
-      }
-    );
+    // fs.writeFile(
+    //   `${dirAcc}/AccessbilityReport_${Pagename}-${browserName}_${curdatatime}.json`,
+    //   JSON.stringify(fullData, null, 4),
+    //   'utf-8',
+    //   (err) => {
+    //     if (err) throw err;
+    //   }
+    // );
   },
 
   async GenerateFinalAccessibilityLiteReport(fullData, additionalData, Pagename, browserName, envName) {
@@ -127,7 +129,9 @@ module.exports = {
     let finalHtml = addDataInHtml.replace('XXX-AdditinalData', JSON.stringify(additionalData));
     finalHtml = finalHtml.replace('XXX-PageName', Pagename);
 
-    const dirAcc = `${global.paths.reports}/${browserName}/${envName}/accessibility`;
+    const dirAcc = `${
+      global.paths.reports
+    }/${browserName}/${envName}/${reportName}-${helpers.currentDate()}/accessibility`;
     if (!fs.existsSync(dirAcc)) {
       fs.ensureDirSync(dirAcc);
     }
@@ -143,18 +147,18 @@ module.exports = {
           path: `${dirAcc}/${fileName}.html`,
         });
     });
-    fs.writeFile(
-      `${dirAcc}/AccessbilityReport_${Pagename}-${browserName}_${curdatatime}.json`,
-      JSON.stringify(fullData, null, 4),
-      'utf-8',
-      (err) => {
-        if (err) throw err;
-      }
-    );
+    // fs.writeFile(
+    //   `${dirAcc}/AccessbilityReport_${Pagename}-${browserName}_${curdatatime}.json`,
+    //   JSON.stringify(fullData, null, 4),
+    //   'utf-8',
+    //   (err) => {
+    //     if (err) throw err;
+    //   }
+    // );
   },
 
   /** This is depricated */
-  GenerateAccessibilityReport(detailreport, Pagename) {
+  GenerateAccessibilityReport(detailreport, Pagename, browserName, envName) {
     // eslint-disable-next-line global-require
     const fs = require('fs-extra');
     const sample = fs.readFileSync('./Accessibility/ReportSample-lite', 'utf-8');
@@ -166,7 +170,9 @@ module.exports = {
     NewHtml = NewHtml.replace('XXX-Incomplete', incompleteHtml);
     NewHtml = NewHtml.replace('XXX-Passed', passedHtml);
     NewHtml = NewHtml.replace('XXX-Inapplicable', iapplicableHtml);
-    const dirAcc = `${global.paths.reports}/Accessibility`;
+    const dirAcc = `${
+      global.paths.reports
+    }/${browserName}/${envName}/${reportName}-${helpers.currentDate()}/accessibility`;
     if (!fs.existsSync(dirAcc)) {
       fs.mkdirSync(dirAcc);
     }

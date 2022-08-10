@@ -146,10 +146,10 @@ global.dateTime = require('./runtime/helpers').reportDate();
  * Use the --utam config to compile the UTAM test files and generate the .JS files
  */
 if (options.utam) {
-  const filePath =
-    projectName === global.projectName
+  const filePath = global.projectName
       ? 'runtime/utam.config.js'
       : './node_modules/klassi-js/runtime/utam.config.js';
+    console.log('this si the project name in ln150 index ', filePath);
 
   exec(`yarn run utam -c ${filePath}`, (err, stdout, stderr) => {
     if (err) console.error(err);
@@ -186,6 +186,9 @@ global.BROWSER_NAME = options.browser;
 global.settings = settings;
 global.paths = paths;
 
+/** adding global helpers */
+global.helpers = require('./runtime/helpers');
+
 /**
  * Adding Global browser folder
  * Adding Accessibility folder at project level
@@ -193,7 +196,7 @@ global.paths = paths;
 global.browserName = global.settings.remoteConfig || BROWSER_NAME;
 const envName = env.envName.toLowerCase();
 const reports = `./reports/${browserName}/${envName}`;
-const axereports = `./reports/${browserName}/${envName}/accessibility`;
+const axereports = `./reports/${browserName}/${envName}/${reportName}-${helpers.currentDate()}/accessibility`;
 
 /** file creation for userAgent globally */
 const file = './shared-objects/docs/userAgent.txt';
@@ -213,9 +216,6 @@ fs.ensureDirSync(axereports, (err) => {
     console.error(`The Accessibility Reports Folder has NOT been created: ${err.stack}`);
   }
 });
-
-/** adding global helpers */
-global.helpers = require('./runtime/helpers');
 
 /** adding global accessibility library */
 // eslint-disable-next-line camelcase
@@ -384,7 +384,7 @@ process.argv.push(
   '--format-options',
   '{"colorsEnabled": true}',
   '-f',
-  `json:${path.resolve(__dirname, paths.reports, browserName, `${global.reportName}-${dateTime}.json`)}`
+  `json:${path.resolve(__dirname, paths.reports, browserName, envName, `${global.reportName}-${dateTime}.json`)}`
 );
 
 /** add cucumber world as first required script (this sets up the globals) */

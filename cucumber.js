@@ -20,30 +20,25 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-const pactumJs = require('pactum');
+const path = require('path');
 
-/**
- * setting the envConfig variables for file list
- */
-const ltUrl = process.env.LAMBDATEST_API_URL;
-const ltUsername = process.env.LAMBDATEST_USERNAME;
-const ltKey = process.env.LAMBDATEST_ACCESS_KEY;
-
-let res;
-let videoID;
-let url;
-
-module.exports = {
-  getVideoList: async () => {
-    const { sessionId } = browser;
-    url = `https://${ltUrl}/sessions/${sessionId}/video`;
-    res = await pactumJs.spec().get(url).withAuth(ltUsername, ltKey).expectStatus(200).toss();
-    videoID = res.body.url;
-    return videoID;
-  },
-
-  getVideoId: async () => {
-    console.log('this is the video link ', videoID);
-    return videoID;
+const options = {
+  default: {
+    require: ['runtime/world.js', 'node_modules/klassi-js/runtime/world.js', 'step_definitions/**/*.js'],
+    tags: global.resultingString,
+    format: [
+      '@cucumber/pretty-formatter',
+      `json:${path.resolve(
+        __dirname,
+        global.paths.reports,
+        browserName,
+        env.envName,
+        `${reportName}-${dateTime}.json`
+      )}`,
+    ],
+    formatOptions: {
+      colorsEnabled: true,
+    },
   },
 };
+module.exports = options;

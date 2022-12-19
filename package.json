@@ -39,13 +39,14 @@
     "ios": "node index.js --disableReport --tags @ios --remoteService lambdatest --env ios --extraSettings ios",
     "test": "node index.js --disableReport --tags",
     "dev": "yarn delete-dev && yarn dev1",
-    "delete-dev": "rm -rf ./reports ./artifacts ./visual-regression-baseline ./log",
+    "delete-dev": "rm -rf ./reports ./artifacts ./log",
     "dev1": "node index.js --disableReport --tags",
     "ltlocal": "node --trace-warnings index.js --disableReport  --remoteService lambdatest --extraSettings",
     "ciltdev": "node index.js --disableReport --utam --tags @uattest --remoteService lambdatest --extraSettings",
     "ciltuat": "nyc node index.js --disableReport --utam --email --tags @uattest --remoteService lambdatest --extraSettings",
     "ciltklassi-js": "node index.js --disableReport --tags @s3 --remoteService lambdatest --extraSettings",
-    "pkgcheck": "yarn install --check-files"
+    "pkgcheck": "yarn install --check-files",
+    "json": "yarn ndjson-to-json './reports/AutomatedReport-16-12-2022-160344647.ndjson' -o 'sample3.json'"
   },
   "homepage": "https://github.com/larryg01/klassi-js#readme",
   "bugs": {
@@ -78,7 +79,7 @@
     "chai": "^4.3.7",
     "commander": "^9.4.1",
     "cosmiconfig": "^8.0.0",
-    "cucumber-html-reporter": "^5.5.0",
+    "cucumber-html-reporter": "https://github.com/larryg01/cucumber-html-reporter",
     "cucumber-junit": "^1.7.1",
     "dotenv": "^16.0.3",
     "fs-extra": "^11.1.0",

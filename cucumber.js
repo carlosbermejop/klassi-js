@@ -39,6 +39,7 @@ const options = {
     formatOptions: {
       colorsEnabled: true,
     },
+    publishQuiet: true,
   },
 };
 module.exports = options;
